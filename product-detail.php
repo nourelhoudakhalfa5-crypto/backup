@@ -1,0 +1,489 @@
+<?php
+require_once 'includes/pdo.php';
+
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?: (isset($_GET['id']) ? (int) $_GET['id'] : null);
+if (!$id) {
+    http_response_code(404);
+    exit('Produit introuvable.');
+}
+
+$stmt = $pdo->prepare("
+    SELECT p.*, c.nom AS categorie
+    FROM produits p
+    LEFT JOIN categories c ON c.id = p.categorie_id
+    WHERE p.id = :id AND p.statut = 'actif'
+");
+$stmt->execute(['id' => $id]);
+$product = $stmt->fetch();
+
+if (!$product) {
+    http_response_code(404);
+    exit('Produit introuvable.');
+}
+
+$productName = htmlspecialchars($product['nom'], ENT_QUOTES, 'UTF-8');
+$productDescription = htmlspecialchars($product['description'] ?: 'Robot RDOC intelligent.', ENT_QUOTES, 'UTF-8');
+$productImage = htmlspecialchars($product['image_url'] ?: 'assets/images/robot.png', ENT_QUOTES, 'UTF-8');
+$productCategory = htmlspecialchars($product['categorie'] ?: 'Robot RDOC', ENT_QUOTES, 'UTF-8');
+$productPrice = number_format((float) $product['prix'], 2) . ' DH';
+?>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="<?= $productDescription ?>" />
+    <title><?= $productName ?></title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/produit-pro.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#5CC4E5',
+              'bg-dark': '#000000',
+              'text-white': '#FFFFFF',
+            },
+            fontFamily: {
+              orbitron: ['Orbitron', 'sans-serif'],
+              inter: ['Inter', 'sans-serif'],
+            },
+            maxWidth: {
+              container: '1200px',
+            },
+            boxShadow: {
+              glow: '0 0 15px rgba(92,196,229,0.5)',
+            }
+          }
+        }
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="stylesheet" href="assets/css/layout-refresh.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  
+
+    
+
+  <link rel="stylesheet" href="assets/css/nav-footer.css" />
+</head>
+  <body class="bg-black text-white font-inter">
+<?php include 'includes/nav.php'; ?>
+
+   <!-- ====== HERO BANNER ====== -->
+<section class="relative w-full h-[80vh] sm:h-[85vh] md:h-[90vh] overflow-hidden flex flex-col bg-black">
+
+ <!-- Background Video -->
+<video 
+  autoplay 
+  muted 
+  loop 
+  playsinline
+  class="absolute inset-0 w-full h-full object-cover opacity-50 z-0"
+>
+  <source src="assets/video/aisar.mp4" type="video/mp4">
+</video>
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/80 z-0 pointer-events-none"></div>
+
+  <div class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 md:px-8 relative z-10 flex flex-col items-center text-center pt-[60px] sm:pt-[80px] lg:pt-[120px] lg:items-start lg:text-left flex-1 justify-start">
+
+    <!-- Subtitle -->
+    <p class="hero-animate-subtitle font-inter text-sm sm:text-base md:text-lg text-primary tracking-[0.2em] uppercase mb-2 sm:mb-3">
+      <?= $productCategory ?>
+    </p>
+
+    <!-- Main Title -->
+    <h1 class="hero-animate-title font-orbitron font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[85px] text-white tracking-[0.1em] leading-[1.1] drop-shadow-2xl mb-4 sm:mb-6">
+      <?= $productName ?>
+    </h1>
+
+    <!-- Description -->
+    <p class="hero-animate-description font-inter text-sm sm:text-base md:text-lg text-white/80 max-w-[500px] lg:max-w-[600px] leading-relaxed mb-6 sm:mb-8">
+      <?= $productDescription ?>
+    </p>
+
+    <!-- CTA -->
+    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto hero-animate-cta">
+      <a href="commander.php" class="btn-commander-large inline-flex items-center justify-center border border-white/50 text-white font-orbitron font-bold text-sm sm:text-base px-8 py-3 rounded-full transition hover:bg-white/10">
+        Commander
+      </a>
+    </div>
+
+  </div>
+</section>
+
+    <!-- ====== FEATURE 1 ====== -->
+    <section class="max-w-container mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-24">
+       <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16">
+          <div class="w-full md:w-5/12 flex justify-center relative">
+             <!-- Soft glow behind the side robot -->
+             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-primary/20 blur-[80px] rounded-full"></div>
+             <img src="<?= $productImage ?>" alt="<?= $productName ?>" class="w-full max-w-[320px] sm:max-w-[300px] md:w-[85%] h-auto relative z-10">
+          </div>
+          
+          <div class="w-full md:w-7/12 flex flex-col items-start gap-6 md:gap-8">
+             <h2 class="font-orbitron font-bold text-[28px] sm:text-[34px] md:text-[40px] lg:text-[46px] text-primary leading-[1.1] tracking-wider">Le Robot Educatif<br>Intelligent</h2>
+             <p class="font-inter font-bold text-base sm:text-lg md:text-xl text-white leading-[1.6] tracking-wide mb-4 max-w-[100%] md:max-w-[500px]">
+               <?= $productDescription ?>
+             </p>
+             <div class="flex flex-col sm:flex-row items-start gap-4 sm:gap-6">
+                <a href="commander.php" class="btn-commander-large inline-flex items-center justify-center bg-white text-black font-orbitron font-bold text-base sm:text-lg px-6 sm:px-8 md:px-10 py-3 md:py-4 rounded-full transition hover:bg-gray-200 w-full sm:w-auto">Commander</a>
+               
+               
+                </div>
+             </div>
+          </div>
+       </div>
+    </section>
+
+    <!-- ====== FEATURE 2 (3-COLUMN POINTERS) ====== -->
+    <section class="max-w-[1300px] mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-24 relative overflow-hidden">
+        <div class="flex flex-col md:flex-row items-center justify-center w-full gap-4 md:gap-0">
+            
+            <!-- Left Column: Pointers -->
+            <div class="w-full md:w-[35%] flex flex-col justify-center gap-12 md:gap-24 lg:gap-40 py-4 md:py-10 relative z-20">
+                <!-- Pointer 1 -->
+                <div class="flex items-center w-full group">
+                   <h3 class="font-inter font-bold text-primary tracking-widest text-xs sm:text-sm whitespace-nowrap">CAPTEUR DE SON</h3>
+                   <div class="flex-1 h-[1px] bg-primary/60 ml-4 hidden md:block group-hover:bg-primary transition-colors"></div>
+                   <div class="w-3 h-3 border border-primary rounded-full relative hidden md:block shadow-glow bg-black">
+                      <div class="w-[4px] h-[4px] bg-primary rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                   </div>
+                </div>
+                <!-- Pointer 2 -->
+                <div class="flex items-center w-full group">
+                   <h3 class="font-inter font-bold text-primary tracking-widest text-xs sm:text-sm whitespace-nowrap">PROJECTEUR</h3>
+                   <div class="flex-1 h-[1px] bg-primary/60 ml-4 hidden md:block group-hover:bg-primary transition-colors"></div>
+                   <div class="w-3 h-3 border border-primary rounded-full relative hidden md:block shadow-glow bg-black">
+                      <div class="w-[4px] h-[4px] bg-primary rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                   </div>
+                </div>
+                <!-- Pointer 3 -->
+                <div class="flex items-center w-full group">
+                   <h3 class="font-inter font-bold text-primary tracking-widest text-xs sm:text-sm whitespace-nowrap">ROTATION 360Â°</h3>
+                   <div class="flex-1 h-[1px] bg-primary/60 ml-4 hidden md:block group-hover:bg-primary transition-colors"></div>
+                   <div class="w-3 h-3 border border-primary rounded-full relative hidden md:block shadow-glow bg-black">
+                      <div class="w-[4px] h-[4px] bg-primary rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                   </div>
+                </div>
+            </div>
+
+            <!-- Center Column: Robot -->
+            <div class="w-full md:w-[30%] flex justify-center relative mt-4 md:mt-0 z-10">
+               <img src="assets/images/product/Gemini_Generated_Image_ioe7t9ioe7t9ioe7-removebg-preview (1) 4.png" alt="Robot Pointers Core" class="w-full max-w-[280px] sm:max-w-[340px] md:max-w-[200px] h-auto object-contain md:-ml-4 relative z-10 scale-95 sm:scale-100 md:scale-110 drop-shadow-[0_0_20px_rgba(92,196,229,0.15)]">
+            </div>
+
+            <!-- Right Column: Text & CTA -->
+            <div class="w-full md:w-[35%] flex flex-col justify-center items-start pl-0 sm:pl-2 md:pl-0 mt-4 md:mt-0 relative z-20 -translate-y-9 -translate-x-9">
+               <h2 class="font-orbitron font-bold text-[24px] sm:text-[28px] md:text-[36px] lg:text-[42px] text-primary leading-[1.1] tracking-wider mb-3 md:mb-6">Aisar<br>L'Innovation a <br>Portée de Main</h2>
+               <p class="font-inter font-bold text-[14px] sm:text-[16px] md:text-[17px] text-white leading-relaxed tracking-wide max-w-[100%] md:max-w-[320px] mb-4 md:mb-8">
+                 <?= $productDescription ?>
+               </p>
+               <a href="#" class="btn-discover-more inline-flex items-center justify-center bg-white text-black font-orbitron font-bold text-[14px] sm:text-base px-6 sm:px-8 py-2.5 sm:py-3 rounded-full transition hover:bg-gray-200 w-full sm:w-auto">Découvrir</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====== FONCTIONNALITÃ‰S PREMIUM ====== -->
+    <section class="max-w-[1300px] mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-24 text-center">
+      <h2 class="font-orbitron font-bold text-[24px] sm:text-[28px] md:text-[36px] lg:text-[40px] text-primary tracking-[0.15em] mb-8 md:mb-12 lg:mb-20 uppercase">FONCTIONNALITER PREMIUM</h2>
+      
+      <div class="flex flex-col lg:flex-row items-center justify-center gap-6 md:gap-8 lg:gap-12 w-full">
+        <!-- Center Robot (Order 1 on mobile) -->
+        <div class="w-[90%] sm:w-[80%] lg:w-[30%] flex justify-center py-4 sm:py-6 lg:py-0 order-1 lg:order-2 mx-auto">
+          <img src="assets/images/product/Whisk_7d418a1b21bd99e92b44217c8a23f37adr-removebg-preview (1) 1.png" alt="Premium Center Robot" class="w-full max-w-[280px] sm:max-w-[320px] drop-shadow-[0_20px_30px_rgba(0,0,0,0.8)] scale-100 sm:scale-110">
+        </div>
+
+        <!-- Left Column -->
+        <div class="w-full lg:w-[35%] flex flex-col gap-6 md:gap-10 lg:gap-14 items-center lg:items-end order-2 lg:order-1">
+          <div class="flex items-center gap-3 sm:gap-5">
+            <div class="text-left lg:text-right w-[130px] sm:w-[150px] lg:w-auto">
+              <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">AUTONOMIE</h4>
+              <p class="font-inter text-[11px] sm:text-[13px] text-white/70  tracking-wider">batterie longue durer</p>
+            </div>
+            <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg order-first lg:order-last">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 10v4a2 2 0 002 2h1a2 2 0 002-2v-4a2 2 0 00-2-2H6a2 2 0 00-2 2zm10 0v4a2 2 0 002 2h1a2 2 0 002-2v-4a2 2 0 00-2-2h-1a2 2 0 00-2 2z"/></svg>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-5">
+            <div class="text-left lg:text-right w-[130px] sm:w-[150px] lg:w-auto">
+               <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">SECURITER</h4>
+               <p class="font-inter text-[11px] sm:text-[13px] text-white/70 tracking-wider">protection données</p>
+            </div>
+            <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg order-first lg:order-last">
+               <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-5">
+            <div class="text-left lg:text-right w-[130px] sm:w-[150px] lg:w-auto">
+               <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">ROBUSTE</h4>
+               <p class="font-inter text-[11px] sm:text-[13px] text-white/70  tracking-wider">résistant aux chocs</p>
+            </div>
+            <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg order-first lg:order-last">
+               <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-5">
+            <div class="text-left lg:text-right w-[130px] sm:w-[150px] lg:w-auto">
+               <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">CONNECTÉ</h4>
+               <p class="font-inter text-[11px] sm:text-[13px] text-white/70  tracking-wider">compatible appareils</p>
+            </div>
+            <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg order-first lg:order-last">
+               <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="w-full lg:w-[35%] flex flex-col gap-6 md:gap-10 lg:gap-14 items-center lg:items-start order-3 lg:order-3">
+          <div class="flex items-center gap-3 sm:gap-5">
+            <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243-4.243a5 5 0 000 7.072m0 0L3 3m3.273 15.536a9 9 0 0012.728 0"/></svg>
+            </div>
+            <div class="text-left w-[130px] sm:w-[150px] lg:w-auto">
+              <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">OFFLINE</h4>
+              <p class="font-inter text-[11px] sm:text-[13px] text-white/70  tracking-wider">sans internet</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-5">
+            <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg">
+               <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+            </div>
+            <div class="text-left w-[130px] sm:w-[150px] lg:w-auto">
+               <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">ASSISTANT IA</h4>
+               <p class="font-inter text-[11px] sm:text-[13px] text-white/70  tracking-wider">intelligente</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-5">
+             <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg">
+               <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v18m0-18l5 5-10 10m10-10l-5 5"/></svg>
+            </div>
+            <div class="text-left w-[130px] sm:w-[150px] lg:w-auto">
+               <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">BLUETOOTH</h4>
+               <p class="font-inter text-[11px] sm:text-[13px] text-white/70  tracking-wider">connexion facile</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 sm:gap-5">
+            <div class="w-[44px] sm:w-[50px] h-[60px] sm:h-[70px] border border-white/20 rounded-md flex items-center justify-center bg-white/5 backdrop-blur shadow-lg">
+               <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div class="text-left w-[130px] sm:w-[150px] lg:w-auto">
+               <h4 class="font-orbitron font-bold text-white text-[13px] sm:text-[15px] tracking-widest mb-1">RAPIDE</h4>
+               <p class="font-inter text-[11px] sm:text-[13px] text-white/70  tracking-wider">exécution fluide</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+   
+
+    <!-- ====== ACCESSOIRES INCLUS ====== -->
+    <section class="max-w-[1200px] mx-auto px-4 sm:px-6 py-16 sm:py-20 md:py-24">
+      <h2 class="font-orbitron font-bold text-[24px] sm:text-[28px] md:text-[36px] text-primary tracking-[0.1em] mb-3 text-center uppercase">Accessoires Inclus</h2>
+      <p class="font-inter text-[14px] sm:text-[16px] text-white/70 text-center mb-12 sm:mb-16 md:mb-20">Tout ce qui accompagne <?= $productName ?> - <?= $productPrice ?></p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 md:gap-10 lg:gap-12">
+        <!-- Chargeur -->
+        <div class="flex flex-col items-center group">
+          <div class="w-full aspect-square max-w-[200px] sm:max-w-[220px] md:max-w-[250px] mx-auto mb-5 sm:mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-white/5 to-white/10 border border-white/10 p-4 sm:p-5 md:p-6 transition-all duration-400 group-hover:border-primary/40 group-hover:shadow-[0_0_30px_rgba(92,196,229,0.15)] group-hover:scale-[1.02]">
+            <img src="/RDOantigrivety/assets/images/product/chargeur.png" alt="chargeur" class="w-full h-full object-contain">
+          </div>
+          <h3 class="font-orbitron font-medium text-[13px] sm:text-[14px] md:text-[15px] text-white tracking-[0.15em] text-center uppercase">chargeur</h3>
+        </div>
+        <!-- Base -->
+        <div class="flex flex-col items-center group">
+          <div class="w-full aspect-square max-w-[200px] sm:max-w-[220px] md:max-w-[250px] mx-auto mb-5 sm:mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-white/5 to-white/10 border border-white/10 p-4 sm:p-5 md:p-6 transition-all duration-400 group-hover:border-primary/40 group-hover:shadow-[0_0_30px_rgba(92,196,229,0.15)] group-hover:scale-[1.02]">
+            <img src="/RDOantigrivety/assets/images/product/base.png" alt="base" class="w-full h-full object-contain">
+          </div>
+          <h3 class="font-orbitron font-medium text-[13px] sm:text-[14px] md:text-[15px] text-white tracking-[0.15em] text-center uppercase">base</h3>
+        </div>
+        <!-- Protecteur -->
+        <div class="flex flex-col items-center group sm:col-span-2 md:col-span-1 sm:max-w-[300px] sm:mx-auto md:max-w-none md:mx-0">
+          <div class="w-full aspect-square max-w-[200px] sm:max-w-[220px] md:max-w-[250px] mx-auto mb-5 sm:mb-6 rounded-2xl overflow-hidden bg-gradient-to-br from-white/5 to-white/10 border border-white/10 p-4 sm:p-5 md:p-6 transition-all duration-400 group-hover:border-primary/40 group-hover:shadow-[0_0_30px_rgba(92,196,229,0.15)] group-hover:scale-[1.02]">
+            <img src="/RDOantigrivety/assets/images/product/protecteur.png" alt="protecteur" class="w-full h-full object-contain">
+          </div>
+          <h3 class="font-orbitron font-medium text-[13px] sm:text-[14px] md:text-[15px] text-white tracking-[0.15em] text-center uppercase">protecteur</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== SERVICES ====== -->
+    <section class="max-w-[1200px] mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center pb-16 sm:pb-24">
+      <h2 class="font-orbitron font-bold text-[24px] sm:text-[28px] md:text-[36px] lg:text-[38px] text-primary tracking-[0.1em] mb-8 sm:mb-12 md:mb-20 uppercase">GARANTIE ET SERVICES</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 lg:gap-16 text-center lg:px-10 mb-8 sm:mb-16 md:mb-24">
+        <!-- Service 1 -->
+        <div class="flex flex-col items-center justify-start">
+          <div class="h-24 sm:h-28 md:h-32 flex items-center justify-center mb-6 md:mb-8">
+             <img src="assets/images/product/Whisk_7d418a1b21bd99e92b44217c8a23f37adr-removebg-preview (1) 1.png" alt="Support Robot" class="h-20 sm:h-24 md:h-28 filter grayscale brightness-125 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+          </div>
+          <h3 class="font-orbitron font-bold text-[18px] sm:text-xl md:text-2xl text-white mb-3 md:mb-4 tracking-wide">Support client 24/7</h3>
+          <p class="font-inter font-medium text-[13px] sm:text-[15px] text-white max-w-[100%] md:max-w-[250px] leading-relaxed mx-auto">Assistance rapide pour toutes vos questions</p>
+        </div>
+        <!-- Service 2 -->
+        <div class="flex flex-col items-center justify-start">
+          <div class="h-24 sm:h-28 md:h-32 flex items-center justify-center mb-6 md:mb-8">
+             <div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-[3px] border-green-500 bg-green-500/10 flex items-center justify-center relative shadow-[0_0_30px_rgba(34,197,94,0.4)]">
+                <!-- Checkmark cluster representing security/certification -->
+                <div class="flex gap-1 relative z-10">
+                   <svg class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-green-500 drop-shadow-[0_0_10px_rgba(34,197,94,1)]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" /></svg>
+                </div>
+                <!-- Decorative text along path in real design -->
+                <div class="absolute inset-2 border-2 border-dashed border-green-500/50 rounded-full animate-[spin_10s_linear_infinite]"></div>
+             </div>
+          </div>
+          <h3 class="font-orbitron font-bold text-[18px] sm:text-xl md:text-2xl text-white mb-3 md:mb-4 tracking-wide">Garantie 3 ans</h3>
+          <p class="font-inter font-medium text-[13px] sm:text-[15px] text-white max-w-[100%] md:max-w-[250px] leading-relaxed mx-auto">Couverture compléte du robot pour toute panne</p>
+        </div>
+        <!-- Service 3 -->
+        <div class="flex flex-col items-center justify-start">
+          <div class="h-24 sm:h-28 md:h-32 flex items-center justify-center mb-6 md:mb-8">
+             <svg class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 17a2 2 0 11-4 0 2 2 0 014 0zM20 17a2 2 0 11-4 0 2 2 0 014 0z" fill="currentColor"/>
+                <path d="M14 16V6a1 1 0 00-1-1H3a1 1 0 00-1 1v10h2m4 0h6m4 0h2v-4.505c0-.493-.16-.973-.454-1.365L18.5 8H14V16v0z"/>
+                <!-- Speed lines -->
+                <path d="M25 8H20M26 5H21M24 2H18" stroke-width="1.5"/>
+             </svg>
+          </div>
+          <h3 class="font-orbitron font-bold text-[18px] sm:text-xl md:text-2xl text-white mb-3 md:mb-4 tracking-wide">Livraison/installation</h3>
+          <p class="font-inter font-medium text-[13px] sm:text-[15px] text-white max-w-[100%] md:max-w-[250px] leading-relaxed mx-auto">Robot livré et prêt à l'emploi directement</p>
+        </div>
+      </div>
+
+       <a href="commander.php" class="btn-commander-large inline-flex items-center justify-center border-[2px] border-primary/50 bg-[#020a10] text-primary font-orbitron font-bold text-base sm:text-lg px-10 sm:px-16 md:px-20 py-3 sm:py-4 rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(92,196,229,0.2)] hover:shadow-[0_0_30px_rgba(92,196,229,0.5)] hover:bg-[#041525] uppercase tracking-widest mt-4 sm:mt-6 w-full sm:w-auto">
+         Commander
+       </a>
+    </section>
+
+    <!-- ====== FOOTER MAP & LAYOUT ====== -->
+            <script src="assets/js/main.js"></script>
+
+    <!-- Coverflow Carousel JavaScript -->
+    <script>
+        class CoverflowCarousel {
+            constructor() {
+                this.currentIndex = 0;
+                this.items = document.querySelectorAll(".coverflow-item");
+                this.dots = document.querySelectorAll(".coverflow-dot");
+                this.totalItems = this.items.length;
+                this.prevBtn = document.getElementById("coverflow-prev");
+                this.nextBtn = document.getElementById("coverflow-next");
+                this.autoPlayInterval = null;
+
+                if(this.totalItems > 0) {
+                   this.init();
+                }
+            }
+
+            init() {
+                // Event listeners
+                this.prevBtn.addEventListener("click", () => this.previous());
+                this.nextBtn.addEventListener("click", () => this.next());
+
+                // Dot click listeners
+                this.dots.forEach((dot, index) => {
+                    dot.addEventListener("click", () => this.goTo(index));
+                });
+
+                // Auto play
+                this.startAutoPlay();
+
+                // Pause on hover
+                const container = document.querySelector(".coverflow-container");
+                if (container) {
+                    container.addEventListener("mouseenter", () => this.stopAutoPlay());
+                    container.addEventListener("mouseleave", () => this.startAutoPlay());
+                }
+
+                // Initial update
+                this.updateFocus();
+            }
+
+            updateFocus() {
+                // Remove all classes first
+                this.items.forEach((item) => {
+                    item.className = "coverflow-item";
+                });
+
+                // Set active item
+                this.items[this.currentIndex].classList.add("active");
+
+                // Calculate relative positions
+                this.items.forEach((item, i) => {
+                    if (i === this.currentIndex) return;
+
+                    let diff = i - this.currentIndex;
+                    
+                    // Handle wrap around
+                    if (diff > this.totalItems / 2) diff -= this.totalItems;
+                    if (diff < -this.totalItems / 2) diff += this.totalItems;
+
+                    if (diff === -1 || (this.currentIndex === 0 && i === this.totalItems - 1 && this.totalItems > 2)) {
+                        item.classList.add("prev");
+                    } else if (diff === 1 || (this.currentIndex === this.totalItems - 1 && i === 0 && this.totalItems > 2)) {
+                        item.classList.add("next");
+                    } else if (diff < -1) {
+                        item.classList.add("prev-prev");
+                    } else if (diff > 1) {
+                        item.classList.add("next-next");
+                    }
+                });
+
+                // Update dots
+                this.dots.forEach((dot, index) => {
+                    dot.classList.toggle("active", index === this.currentIndex);
+                });
+            }
+
+            goTo(index) {
+                if (index >= 0 && index < this.totalItems) {
+                    this.currentIndex = index;
+                    this.updateFocus();
+                }
+            }
+
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.totalItems;
+                this.updateFocus();
+            }
+
+            previous() {
+                this.currentIndex = (this.currentIndex - 1 + this.totalItems) % this.totalItems;
+                this.updateFocus();
+            }
+
+            startAutoPlay() {
+                this.stopAutoPlay();
+                this.autoPlayInterval = setInterval(() => {
+                    this.next();
+                }, 4000);
+            }
+
+            stopAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                }
+            }
+        }
+
+        // Initialize carousel when DOM is loaded
+        document.addEventListener("DOMContentLoaded", () => {
+            new CoverflowCarousel();
+        });
+
+        
+    </script>
+  
+
+<?php include 'includes/footer.php'; ?>
+<script src="assets/js/nav.js"></script>
+</body>
+</html>
+

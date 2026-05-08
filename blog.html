@@ -1,0 +1,705 @@
+﻿<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="RDOC Blog - Explorer les robots intelligents et leur rôle dans l'Éducation et la société."
+        />
+        <title>Blog - RDOC</title>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: "#5CC4E5",
+                            "bg-dark": "#000000",
+                            "text-white": "#FFFFFF",
+                            "text-muted": "rgba(255, 255, 255, 0.7)",
+                            "text-dim": "rgba(255, 255, 255, 0.5)",
+                            "glass-bg": "rgba(255, 255, 255, 0.21)",
+                            "glass-border": "rgba(255, 255, 255, 0.1)",
+                        },
+                        fontFamily: {
+                            orbitron: ["Orbitron", "sans-serif"],
+                            inter: ["Inter", "sans-serif"],
+                        },
+                        backdropBlur: {
+                            29: "29px",
+                        },
+                        maxWidth: {
+                            container: "1440px",
+                        },
+                    },
+                },
+            };
+        </script>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+          
+            .glass {
+                background: rgba(255, 255, 255, 0.21);
+                backdrop-filter: blur(29px);
+                -webkit-backdrop-filter: blur(29px);
+            }
+            .logo-img {
+                height: 38px;
+                width: auto;
+            }
+            .auth-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 6px 23px;
+                height: 40px;
+                border-radius: 18px;
+                border: 1px solid transparent;
+                background-image:
+                    linear-gradient(#000, #000),
+                    linear-gradient(135deg, #ffffff, #5cc4e5);
+                background-origin: border-box;
+                background-clip: padding-box, border-box;
+                font-family: "Inter", sans-serif;
+                font-size: 16px;
+                font-weight: 500;
+                letter-spacing: -0.176px;
+                line-height: 24px;
+                color: #ffffff;
+                transition: all 0.3s;
+                text-decoration: none;
+            }
+            .auth-button:hover {
+                background-image:
+                    linear-gradient(
+                        rgba(92, 196, 229, 0.1),
+                        rgba(92, 196, 229, 0.1)
+                    ),
+                    linear-gradient(135deg, #5cc4e5, #ffffff);
+            }
+            .nav-pill-bar {
+                display: flex;
+                align-items: center;
+                gap: 22px;
+                height: 55px;
+                padding: 0 40px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                border-radius: 28px;
+                backdrop-filter: blur(10px);
+            }
+            .nav-pill-link {
+                font-family: "Orbitron", sans-serif;
+                font-size: 20px;
+                color: #ffffff;
+                text-decoration: none;
+                transition: all 0.3s;
+                letter-spacing: -0.22px;
+            }
+            .nav-pill-link.active {
+                font-weight: 700;
+                color: #5cc4e5;
+            }
+            .nav-pill-link:hover {
+                color: #5cc4e5;
+            }
+            .btn-outline {
+                display: inline-block;
+                padding: 14px 46px;
+                background: #000;
+                border: none;
+                border-radius: 50px;
+                color: #5cc4e5;
+                font-family: "Orbitron", sans-serif;
+                font-size: 20px;
+                font-weight: 700;
+                letter-spacing: 2.6px;
+                text-align: center;
+                box-shadow: 1px -1px 19.7px 0px #5cc4e5;
+                opacity: 0.8;
+                transition: all 0.3s;
+                cursor: pointer;
+                text-decoration: none;
+            }
+            .btn-outline:hover {
+                opacity: 1;
+                box-shadow: 1px -1px 30px 0px #5cc4e5;
+            }
+            .search-bar {
+                width: 100%;
+                padding: 14px 24px;
+                background: rgba(255, 255, 255, 0.22);
+                backdrop-filter: blur(21.9px);
+                -webkit-backdrop-filter: blur(21.9px);
+                border: 1px solid rgba(255, 255, 255, 0.22);
+                border-radius: 20px;
+                color: #ffffff;
+                font-family: "Inter", sans-serif;
+                font-size: 16px;
+                transition: border-color 0.3s;
+                outline: none;
+            }
+            .search-bar::placeholder {
+                color: rgba(255, 255, 255, 0.5);
+            }
+            .search-bar:focus {
+                border-color: #5cc4e5;
+            }
+            .category-btn {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 14px 20px;
+                background: transparent;
+                border: 1px solid rgba(255, 255, 255, 0.22);
+                border-radius: 20px;
+                color: #ffffff;
+                font-family: "Inter", sans-serif;
+                font-size: 16px;
+                font-weight: 500;
+                transition: all 0.3s;
+                cursor: pointer;
+                width: 100%;
+            }
+            .category-btn:hover {
+                border-color: #5cc4e5;
+                background: rgba(92, 196, 229, 0.05);
+            }
+            .category-count {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 37px;
+                height: 29px;
+                background: rgba(255, 255, 255, 0.22);
+                backdrop-filter: blur(29.9px);
+                -webkit-backdrop-filter: blur(29.9px);
+                border-radius: 7px;
+                font-family: "Inter", sans-serif;
+                font-size: 16px;
+                font-weight: 500;
+                color: #ffffff;
+            }
+            .blog-card {
+                border-radius: 20px;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                background: rgba(255, 255, 255, 0.21);
+                backdrop-filter: blur(57.9px);
+                -webkit-backdrop-filter: blur(57.9px);
+            }
+            .blog-card-img {
+                width: 100%;
+                height: 299px;
+                object-fit: cover;
+                border-radius: 20px 20px 0 0;
+                display: block;
+            }
+            .blog-card-glass {
+                flex: 1;
+                padding: 20px;
+                border-radius: 0 20px 20px 0;
+                border-left: 1px solid rgba(255, 255, 255, 0.15);
+            }
+            .featured-article-glass {
+                background: rgba(255, 255, 255, 0.22);
+                backdrop-filter: blur(29px);
+                -webkit-backdrop-filter: blur(29px);
+                border-radius: 20px;
+            }
+            .read-more-link {
+                font-family: "Inter", sans-serif;
+                font-size: 16px;
+                font-weight: 500;
+                color: #5cc4e5;
+                text-decoration: none;
+                transition: opacity 0.3s;
+            }
+            .read-more-link:hover {
+                opacity: 0.7;
+            }
+            @media (max-width: 1024px) {
+                .nav-pill-bar {
+                    display: none;
+                }
+            }
+            @media (max-width: 768px) {
+                .blog-card-img {
+                    height: 200px;
+                }
+                .blog-card-glass {
+                    padding: 14px;
+                }
+                .blog-card-glass .font-inter.text-sm {
+                    font-size: 12px;
+                }
+                .blog-card-glass .font-orbitron.text-lg {
+                    font-size: 15px;
+                }
+                .blog-card-glass .read-more-link {
+                    font-size: 13px;
+                }
+            }
+            @media (max-width: 480px) {
+                .blog-card-img {
+                    height: 180px;
+                }
+            }
+        </style>
+        <link rel="stylesheet" href="assets/css/responsive.css" />
+    <link rel="stylesheet" href="assets/css/layout-refresh.css" />
+    </head>
+    <body class="blog-page">
+      
+
+        <!-- Mobile Bottom Navigation -->
+        <div
+            class="fixed bottom-0 left-0 right-0 lg:hidden z-50 bg-black/95 backdrop-blur-md border-t border-[rgba(255,255,255,0.1)] px-4 py-3"
+        >
+            <div class="flex justify-around items-center text-white">
+                <a
+                    href="index.html"
+                    class="flex flex-col items-center text-xs text-white/70"
+                >
+                    <svg
+                        class="w-6 h-6 mb-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <title>Accueil</title>
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"
+                        />
+                    </svg>
+                    Accueil
+                </a>
+                <a
+                    href="apropos.html"
+                    class="flex flex-col items-center text-xs text-white/70"
+                >
+                    <svg
+                        class="w-6 h-6 mb-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <title>A propos</title>
+                        <path
+                            fill-rule="evenodd"
+                            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                    A propos
+                </a>
+                <a
+                    href="categorie.html"
+                    class="flex flex-col items-center text-xs text-white/70"
+                >
+                    <svg
+                        class="w-6 h-6 mb-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <title>CatÃ©gorie</title>
+                        <path
+                            d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"
+                        />
+                    </svg>
+                    CatÃ©gorie
+                </a>
+                <a
+                    href="produit.html"
+                    class="flex flex-col items-center text-xs text-white/70"
+                >
+                    <svg
+                        class="w-6 h-6 mb-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+                    </svg>
+                    Produit
+                </a>
+                <a
+                    href="blog.html"
+                    class="flex flex-col items-center text-xs text-primary"
+                >
+                    <svg
+                        class="w-6 h-6 mb-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <title>Blog</title>
+                        <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+                        <path d="M7 7h6M7 10h6M7 13h4"/>
+                    </svg>
+                    Blog
+                </a>
+                <a
+                    href="contact.html"
+                    class="flex flex-col items-center text-xs text-white/70"
+                >
+                    <svg
+                        class="w-6 h-6 mb-1"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                    >
+                        <title>Contact</title>
+                        <path
+                            d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                        />
+                        <path
+                            d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                        />
+                    </svg>
+                    Contact
+                </a>
+            </div>
+        </div>
+
+        <!-- Mobile bottom padding for fixed bottom nav -->
+        <div class="lg:hidden" style="height: 80px"></div>
+
+        <!-- Add padding top for fixed navbar on desktop -->
+        <div class="hidden lg:block" style="height: 80px"></div>
+        <!-- Mobile top padding for fixed logo -->
+        <div class="lg:hidden" style="height: 70px"></div>
+
+        <!-- ====== HERO SECTION ====== -->
+        <section class="pb-[40px] lg:py-[80px]">
+            <div class="max-w-container mx-auto px-4 md:px-8 lg:px-24">
+                <div class="grid grid-cols-1 lg:grid-cols-[611px_1fr] gap-0 overflow-hidden rounded-[16px] lg:rounded-[20px] border border-white/10">
+                    <!-- Left: Hero Image with Glass Overlay -->
+                    <div class="relative overflow-hidden">
+                        <img
+                            src="assets/images/blog/888396f0b256a57b3091c5afbeaa05f9 1.png"
+                            alt="Robot Hero"
+                            class="w-full h-[280px] sm:h-[320px] md:h-[380px] lg:h-[617px] object-cover block"
+                        />
+                        <div class="absolute bottom-0 left-0 right-0 bg-white/21 backdrop-blur-[57.9px] flex flex-col justify-end p-4 sm:p-5 md:p-6 lg:p-[22px]">
+                            <h1 class="font-orbitron font-medium text-[22px] sm:text-[26px] md:text-[30px] lg:text-[40px] text-white leading-tight mb-2 lg:mb-3">
+                                <span class="text-primary">Robotique</span> & Innovation
+                            </h1>
+                            <p class="font-inter text-sm sm:text-base lg:text-[20px] text-white leading-relaxed mb-3 lg:mb-5 max-w-[495px] hidden sm:block">
+                                Explorer les robots intelligents et leur rôle dans l'Éducation et la société.
+                            </p>
+                            <a href="#articles" class="btn-outline self-start text-xs sm:text-sm px-5 sm:px-6 py-2 sm:py-2.5 lg:text-base lg:px-8 lg:py-3">lire plus...</a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Search & Categories Glass Panel -->
+                    <div class="bg-white/21 backdrop-blur-[29px] rounded-b-[16px] lg:rounded-bl-none lg:rounded-r-[16px] rounded-t-[16px] lg:rounded-t-[20px] p-4 sm:p-5 lg:p-[30px] flex flex-col gap-4 sm:gap-5 lg:gap-6">
+                        <!-- Search Bar -->
+                        <div>
+                            <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="#5CC4E5" stroke-width="3.75">
+                                    <circle cx="10" cy="10" r="7"/>
+                                    <line x1="15" y1="15" x2="21" y2="21" stroke-linecap="round"/>
+                                </svg>
+                                <span class="font-inter text-base sm:text-lg lg:text-xl font-medium text-white">Recherche</span>
+                            </div>
+                            <input
+                                type="text"
+                                class="search-bar text-sm sm:text-base"
+                                placeholder="Trouver un article..."
+                            />
+                        </div>
+
+                        <!-- Categories -->
+                        <div>
+                            <div class="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="#5CC4E5" stroke-width="3">
+                                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                                </svg>
+                                <span class="font-inter text-base sm:text-lg lg:text-xl font-medium text-white">Categories</span>
+                            </div>
+
+                            <div class="flex flex-col gap-2 sm:gap-3">
+                                <button class="category-btn text-sm sm:text-base py-3 px-4 sm:py-3 sm:px-5">
+                                    <span>Intelligence Artificielle</span>
+                                    <span class="category-count text-xs sm:text-base">12</span>
+                                </button>
+                                <button class="category-btn text-sm sm:text-base py-3 px-4 sm:py-3 sm:px-5">
+                                    <span>Education Tech</span>
+                                    <span class="category-count text-xs sm:text-base">16</span>
+                                </button>
+                                <button class="category-btn text-sm sm:text-base py-3 px-4 sm:py-3 sm:px-5">
+                                    <span>Robotique Avancé</span>
+                                    <span class="category-count text-xs sm:text-base">07</span>
+                                </button>
+                                <button class="category-btn text-sm sm:text-base py-3 px-4 sm:py-3 sm:px-5">
+                                    <span>Etique et future</span>
+                                    <span class="category-count text-xs sm:text-base">23</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== FEATURED ARTICLE ====== -->
+        <section class="pb-[40px] lg:pb-[80px]">
+            <div class="max-w-container mx-auto px-4 md:px-8 lg:px-24">
+                <!-- Section Header -->
+                <div class="flex items-center gap-3 sm:gap-4 md:gap-[30px] mb-[24px] sm:mb-[30px] lg:mb-[40px]">
+                    <div class="w-[50px] sm:w-[65px] md:w-[85px] h-[3px] bg-primary rounded-full shrink-0"></div>
+                    <h2 class="font-inter text-lg sm:text-xl md:text-2xl lg:text-[32px] font-medium text-white">
+                        Article Ã  la une
+                    </h2>
+                    <a href="#" class="font-inter text-xs sm:text-sm md:text-base text-primary hover:opacity-70 transition-opacity ml-auto hidden sm:block">
+                        Voir tous 
+                    </a>
+                </div>
+
+                <!-- Featured Article Card -->
+                <div class="featured-article-glass p-4 sm:p-6 md:p-8 lg:p-[50px]">
+                    <div class="grid grid-cols-1 lg:grid-cols-[1fr_630px] gap-[20px] lg:gap-[50px] items-center">
+                        <!-- Left: Content -->
+                        <div>
+                            <span class="inline-block font-inter text-xs sm:text-sm md:text-base font-bold text-primary mb-2 sm:mb-3 lg:mb-4">
+                                EDUCATION TECH
+                            </span>
+                            <h3 class="font-orbitron text-lg sm:text-xl md:text-2xl lg:text-[40px] font-normal text-white leading-tight mb-4 sm:mb-5 lg:mb-6">
+                                Apprentissage <br><br> intelligent 
+                            </h3>
+                            <p class="font-inter text-xs sm:text-sm md:text-base lg:text-lg text-white/80 leading-relaxed mb-5 sm:mb-6 lg:mb-8">
+                                Transformer chaque moment d'apprentissage en une expérience intelligente, interactive et inspirante, la technologie facilite la compréhension et stimule la créativité des élèves.
+                            </p>
+                            <a href="#" class="btn-outline text-xs sm:text-sm md:text-base px-5 sm:px-6 lg:px-8 py-2 sm:py-2.5 lg:py-3">Lire l'article</a>
+                        </div>
+
+                        <!-- Mobile Featured Image (shown on mobile) -->
+                        <div class="sm:hidden">
+                            <img
+                                src="assets/images/blog/1798dbbd7adf96c01343ec30f5515579 1.png"
+                                alt="Featured Article"
+                                class="w-full rounded-[12px] object-cover h-[180px]"
+                            />
+                        </div>
+
+                        <!-- Right: Image -->
+                        <div class="hidden sm:block">
+                            <img
+                                src="assets/images/blog/1798dbbd7adf96c01343ec30f5515579 1.png"
+                                alt="Featured Article"
+                                class="w-full rounded-[12px] sm:rounded-[16px] lg:rounded-[20px] object-cover h-[220px] md:h-[300px] lg:h-[442px]"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====== BLOG GRID ====== -->
+        <section class="pb-[60px] lg:pb-[100px]" id="articles">
+            <div class="max-w-container mx-auto px-4 md:px-8 lg:px-24">
+                <!-- Section Header -->
+                <div class="flex items-center gap-3 sm:gap-4 md:gap-[30px] mb-[24px] sm:mb-[30px] lg:mb-[40px]">
+                    <div class="w-[50px] sm:w-[65px] md:w-[85px] h-[3px] bg-primary rounded-full shrink-0"></div>
+                    <h2 class="font-inter text-lg sm:text-xl md:text-2xl lg:text-[32px] font-medium text-white">
+                        Dernieres publications
+                    </h2>
+                </div>
+
+                <!-- Blog Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[30px]">
+
+                    <!-- Row 1 -->
+                    <!-- Card 1 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/e666a948aa6071b68d46be12cefe72b6 1.png"
+                            alt="IA et Robots"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 3 jour</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                IA et Robots
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                Comment les robots intelligents transforment l'apprentissage, rendant chaque leçon plus interactive et ludique grâçe à l'IA.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/1992cfa5209bab53f2ba9601c0297db8 1.png"
+                            alt="Apprendre avec IA"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 5 jour</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                Apprendre avec IA
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                L'association de l'IA et de la robotique permet un enseignement dynamique, engageant et centré sur chaque élève.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/828770c046708b1ecf6fabfc9fcf748c 1.png"
+                            alt="Education Futur"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 1 sem</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                Ã‰ducation Futur
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                Des robots capables de comprendre et s'adapter , pour une expérience éducative unique et stimulante.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Row 2 -->
+                    <!-- Card 4 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/933c097c91fae04cc0933326b3bcd863 1.png"
+                            alt="Robotique Intelligente"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 2 sem</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                Robotique Intelligente
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                Découvrir comment les robots équipés d'IA aident les élèves à explorer les sciences et les technologies de manière ludique et interactive.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/1c6fedcb3d246e28fd9654bf73e32746 1.png"
+                            alt="Tunisie Innovante"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 2 sem</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                Tunisie Innovante
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                Comment l'IA transforme les entreprises tunisiennes, en rendant les services plus intelligents et les processus plus efficaces.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/888396f0b256a57b3091c5afbeaa05f9 1.png"
+                            alt="IA au Service de l'Ã‰cole"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 3 sem</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                IA au Service de l'école
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                Les outils intelligents rendent l'apprentissage personnalisé, adaptant chaque leçon au rythme et aux besoins de l'élève.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Row 3 -->
+                    <!-- Card 7 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/1b857c45034273728acda012e79dcfe8 1.png"
+                            alt="Futur NumÃ©rique"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 1 mois</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                Futur Numérique
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                La technologie et l'IA en Tunisie permettent de moderniser les services publics et d'améliorer la vie quotidienne des citoyens.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 8 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/5bb6576ac45c93e637c2c69d0860dcb9 1.png"
+                            alt="Tech en Tunisie"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 1 mois</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                Tech en Tunisie
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                Les start-ups tunisiennes adoptent l'intelligence artificielle pour créer des solutions innovantes dans l'éducation, la santé et l'industrie.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                    <!-- Card 9 -->
+                    <div class="blog-card">
+                        <img
+                            src="assets/images/blog/933c097c91fae04cc0933326b3bcd863 1.png"
+                            alt="Education Innovante"
+                            class="blog-card-img"
+                        />
+                        <div class="blog-card-glass">
+                            <span class="font-inter text-xs text-white/60 mb-2 block">il ya 1 mois</span>
+                            <h4 class="font-orbitron text-lg font-medium text-primary mb-2 leading-tight">
+                                Education Innovante
+                            </h4>
+                            <p class="font-inter text-sm text-white/70 leading-relaxed mb-3">
+                                Explorer les dernières innovations technologiques qui transforment l'expérience éducative dans les écoles tunisiennes et au-delà.
+                            </p>
+                            <a href="#" class="read-more-link">Lire la suite</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- View All Link -->
+                <div class="text-center mt-[30px] sm:mt-[40px] lg:mt-[50px]">
+                    <a href="#" class="btn-outline text-xs sm:text-sm md:text-base px-5 sm:px-6 lg:px-8 py-2 sm:py-2.5 lg:py-3">Voir tous </a>
+                </div>
+            </div>
+        </section>
+
+       
+
+        <script src="assets/js/main.js"></script>
+    </body>
+</html>
+

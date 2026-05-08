@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commander - RDOC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/layout-refresh.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'orbitro', sans-serif;
+            min-height: 100vh;
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        .dropdown-enter {
+            animation: fadeSlideDown 0.3s ease-out forwards;
+        }
+
+        .dropdown-exit {
+            animation: fadeSlideUp 0.3s ease-out forwards;
+        }
+
+        .favicon-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .favicon-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: rotate(0deg);
+            transition: transform 0.2s ease-out;
+        }
+        
+        .favicon-logo:hover img {
+            animation: spin 0.5s linear infinite;
+            cursor: pointer;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .menu-item {
+            transition: all 0.2s ease;
+            position: relative;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .menu-item:hover {
+            color: #5CC4E5;
+            font-weight: bold;
+        }
+
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #5CC4E5;
+            transform: translateX(-50%);
+            transition: width 0.2s ease;
+        }
+
+        .menu-item:hover::after {
+            width: 60%;
+        }
+
+        .site-footer {
+            background: #000000;
+            color: #ffffff;
+            padding: 60px 0 30px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 80px;
+        }
+
+        .footer-logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 24px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-icon {
+            width: 44px;
+            height: 44px;
+            border: 1px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: #5CC4E5;
+            border-color: #5CC4E5;
+            color: #000000;
+        }
+
+        .footer-newsletter {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-heading {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .newsletter-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #5CC4E5;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 16px 18px;
+            border: none;
+            background: transparent;
+            color: #000000;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .newsletter-input::placeholder {
+            color: #000000;
+        }
+
+        .newsletter-btn {
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: none;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .newsletter-btn:hover {
+            color: #5CC4E5;
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-list li {
+            margin-bottom: 12px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-list a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-list a:hover {
+            color: #5CC4E5;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 50px auto 0;
+            padding: 25px 60px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                padding: 0 30px;
+                text-align: center;
+            }
+
+            .footer-logo {
+                margin: 0 auto 24px;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+
+            .site-footer {
+                padding: 40px 0 20px;
+            }
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 600px;
+            background: #0a0a0a;
+            border: 1px solid rgba(92, 196, 229, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 0 50px rgba(92, 196, 229, 0.1);
+            margin: 120px auto 80px;
+        }
+
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #5CC4E5;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px 18px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #5CC4E5;
+            background: rgba(92, 196, 229, 0.05);
+            box-shadow: 0 0 15px rgba(92, 196, 229, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: #5CC4E5;
+            color: #000000;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(92, 196, 229, 0.4);
+        }
+
+        .back-link {
+            margin-top: 25px;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #5CC4E5;
+        }
+
+        /* Success Message Styling */
+        #success-message {
+            display: none;
+            text-align: center;
+        }
+
+        #success-message h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: #5CC4E5;
+            margin-bottom: 15px;
+        }
+    </style>
+  <link rel="stylesheet" href="assets/css/nav-footer.css" />
+</head>
+<body>
+<?php include 'includes/nav.php'; ?>
+
+
+   <div class="form-container" id="order-form-container">
+        <h1 class="title">Passer une commande</h1>
+        <form id="orderForm">
+            <div class="form-group">
+                <label for="fullname">Nom Complet</label>
+                <input type="text" id="fullname" name="fullname" class="form-control" placeholder="Ex: Jean Dupont" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Adresse Email</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="Ex: jean@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Numéro de Téléphone</label>
+                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Ex: +216 00 000 000" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="product">Nom du Produit (Optionnel)</label>
+                <select id="product" name="product" class="form-control">
+                    <option value="">Sélectionnez un produit</option>
+                    <option value="aisar">Aisar - Robot Éducatif</option>
+                    <option value="aivish">Aivish - Gestion Intelligente</option>
+                    <option value="aihrus">Aihrus - Innovation Moderne</option>
+                </select>
+            </div>
+            
+           
+            
+            <button type="submit" class="submit-btn">Envoyer la Commande</button>
+        </form>
+    </div>
+
+    <div id="success-message" class="form-container">
+        <h2>Commande Envoyée !</h2>
+        <p>Merci pour votre confiance. Notre équipe vous contactera très prochainement pour confirmer les détails.</p>
+        <a href="index.php" class="back-link" style="display: block; margin-top: 20px;">Retour à l'accueil</a>
+    </div>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navbarInner = document.getElementById('navbar-inner');
+        const dropdown = document.getElementById('dropdown');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+
+        let isMenuOpen = false;
+
+        menuToggle.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+
+            if (isMenuOpen) {
+                navbarInner.classList.remove('bg-white');
+                navbarInner.classList.add('bg-black');
+                line1.classList.remove('bg-black', 'rotate-0', 'translate-y-0');
+                line1.classList.add('bg-white', 'rotate-45', 'translate-y-2');
+                line2.classList.remove('bg-black', 'rotate-0', 'translate-y-0');
+                line2.classList.add('bg-white', '-rotate-45', '-translate-y-2');
+                dropdown.classList.remove('hidden', 'dropdown-exit');
+                dropdown.classList.add('dropdown-enter');
+            } else {
+                closeMenu();
+            }
+        });
+
+        function closeMenu() {
+            navbarInner.classList.remove('bg-black');
+            navbarInner.classList.add('bg-white');
+            line1.classList.remove('bg-white', 'rotate-45', 'translate-y-2');
+            line1.classList.add('bg-black', 'rotate-0', 'translate-y-0');
+            line2.classList.remove('bg-white', '-rotate-45', '-translate-y-2');
+            line2.classList.add('bg-black', 'rotate-0', 'translate-y-0');
+            dropdown.classList.remove('dropdown-enter');
+            dropdown.classList.add('dropdown-exit');
+            setTimeout(() => {
+                if (!isMenuOpen) {
+                    dropdown.classList.add('hidden');
+                }
+            }, 300);
+        }
+
+        document.addEventListener('click', (e) => {
+            const navbar = document.getElementById('navbar');
+            if (navbar && !navbar.contains(e.target) && isMenuOpen) {
+                isMenuOpen = false;
+                closeMenu();
+            }
+        });
+
+        // Lenis smooth scroll initialization
+        const lenis = new Lenis();
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulation of form submission
+            document.getElementById('order-form-container').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            
+            // In a real application, you would send data to a server here
+            const formData = new FormData(this);
+            console.log('Order Details:', Object.fromEntries(formData.entries()));
+        });
+    </script>
+    <script src="assets/js/main.js"></script>
+<?php include 'includes/footer.php'; ?>
+<script src="assets/js/nav.js"></script>
+</body>
+</html>

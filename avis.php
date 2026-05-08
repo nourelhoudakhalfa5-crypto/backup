@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avis Clients - RDOC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/layout-refresh.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        .dropdown-enter {
+            animation: fadeSlideDown 0.3s ease-out forwards;
+        }
+
+        .dropdown-exit {
+            animation: fadeSlideUp 0.3s ease-out forwards;
+        }
+
+        .favicon-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .favicon-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: rotate(0deg);
+            transition: transform 0.2s ease-out;
+        }
+        
+        .favicon-logo:hover img {
+            animation: spin 0.5s linear infinite;
+            cursor: pointer;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .menu-item {
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            color: #5CC4E5;
+            font-weight: bold;
+        }
+
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #5CC4E5;
+            transform: translateX(-50%);
+            transition: width 0.2s ease;
+        }
+
+        .menu-item:hover::after {
+            width: 60%;
+        }
+
+        .site-footer {
+            background: #000000;
+            color: #ffffff;
+            padding: 60px 0 30px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 80px;
+        }
+
+        .footer-logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 24px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-icon {
+            width: 44px;
+            height: 44px;
+            border: 1px solid #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: #5CC4E5;
+            border-color: #5CC4E5;
+            color: #000000;
+        }
+
+        .footer-newsletter {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .footer-heading {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .newsletter-desc {
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #5CC4E5;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .newsletter-form {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 16px 18px;
+            border: none;
+            background: transparent;
+            color: #000000;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .newsletter-input::placeholder {
+            color: #000000;
+        }
+
+        .newsletter-btn {
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: none;
+            color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .newsletter-btn:hover {
+            color: #5CC4E5;
+        }
+
+        .footer-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-list li {
+            margin-bottom: 12px;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-list a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-list a:hover {
+            color: #5CC4E5;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 50px auto 0;
+            padding: 25px 60px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 50px;
+                padding: 0 30px;
+                text-align: center;
+            }
+
+            .footer-logo {
+                margin: 0 auto 24px;
+            }
+
+            .social-icons {
+                justify-content: center;
+            }
+
+            .site-footer {
+                padding: 40px 0 20px;
+            }
+        }
+
+
+        .page-header {
+              padding: 20px 20px 10px;
+    margin-top: 90px;
+            text-align: center;
+            background:#000000;
+            border-bottom: 1px solid rgba(92, 196, 229, 0.2);
+        }
+
+        .page-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            color: #5CC4E5;
+            margin-bottom: 15px;
+            text-shadow: 0 0 40px rgba(92, 196, 229, 0.5);
+            letter-spacing: 3px;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 25px;
+            padding: 12px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: #5CC4E5;
+            background: transparent;
+            border: 2px solid #5CC4E5;
+            border-radius: 30px;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #5CC4E5;
+            color: #000000;
+            box-shadow: 0 0 30px rgba(92, 196, 229, 0.5);
+        }
+
+        .reviews-full-section {
+            padding: 80px 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .reviews-grid-full {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .review-card-full {
+            background: linear-gradient(135deg, rgba(20, 20, 35, 0.9) 0%, rgba(10, 10, 20, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 35px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .review-card-full::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at top, rgba(92, 196, 229, 0.06) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .review-card-full:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(92, 196, 229, 0.4);
+            box-shadow: 0 20px 60px rgba(92, 196, 229, 0.15);
+        }
+
+        .review-card-full:hover::before {
+            opacity: 1;
+        }
+
+        .review-avatar-full {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5CC4E5 0%, #7DD3F0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #000000;
+            box-shadow: 0 0 25px rgba(92, 196, 229, 0.3);
+        }
+
+        .review-stars-full {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 15px;
+        }
+
+        .review-star-full {
+            width: 18px;
+            height: 18px;
+            fill: #5CC4E5;
+        }
+
+        .review-name-full {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 17px;
+            color: #5CC4E5;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .review-text-full {
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        .comment-section {
+            background: linear-gradient(135deg, rgba(15, 15, 30, 0.95) 0%, rgba(5, 5, 15, 0.98) 100%);
+            border: 2px solid rgba(92, 196, 229, 0.25);
+            border-radius: 24px;
+            padding: 60px 50px;
+            max-width: 800px;
+            margin: 0 auto 80px;
+        }
+
+        .comment-section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: #5CC4E5;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 30px rgba(92, 196, 229, 0.4);
+            letter-spacing: 2px;
+        }
+
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #5CC4E5;
+            box-shadow: 0 0 20px rgba(92, 196, 229, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: #000000;
+            background: linear-gradient(135deg, #5CC4E5 0%, #7DD3F0 100%);
+            border: none;
+            padding: 18px 50px;
+            border-radius: 35px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: center;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(92, 196, 229, 0.6);
+        }
+
+        .user-comments-section {
+            padding: 0 0 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .review-card-animated {
+            animation: fadeSlideIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .review-timestamp {
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 15px;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 1100px) {
+            .reviews-grid-full {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 750px) {
+            .reviews-grid-full {
+                grid-template-columns: 1fr;
+            }
+            .page-header h1 {
+                font-size: 32px;
+            }
+            .comment-section {
+                padding: 40px 25px;
+            }
+            .comment-section-title {
+                font-size: 26px;
+            }
+        }
+    </style>
+  <link rel="stylesheet" href="assets/css/nav-footer.css" />
+</head>
+<body>
+<?php include 'includes/nav.php'; ?>
+
+
+   <header class="page-header">
+        <h1>Avis de nos clients</h1>
+        <p>Découvrez les témoignages de nos clients satisfaits. Nous sommes impatients de partager leurs expériences avec vous.</p>
+        <a href="index.php" class="back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            Retour aux acceuil
+        </a>
+    </header>
+
+    <section class="reviews-full-section">
+        <div class="reviews-grid-full">
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">ABS</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Ahmed Ben Salah</h3>
+                <p class="review-text-full">Les robots sont très utiles pour l'éducation, excellent travail de l'équipe RDOC. Mes élèves adorent apprendre avec Aisar.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">YT</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Youssef Trabelsi</h3>
+                <p class="review-text-full">Interface simple et technologie impressionnante. Aivish nous aide greatly dans la gestion quotidienne de notre établissement.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">MBY</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Mariem Ben Yedder</h3>
+                <p class="review-text-full">Très bon produit, je recommande fortement pour les écoles. Le robot Aihrus a transformé notre façon de travailler.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">IJ</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Ines Jaziri</h3>
+                <p class="review-text-full">Service client exceptionnel et robots de très haute qualité. L'intégration dans nos classes s'est faite sans difficulté.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">AH</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Ali Haddad</h3>
+                <p class="review-text-full">Innovation remarquable Made in Tunisia. Ces robots représentent l'avenir de l'éducation dans notre pays.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">KG</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Karim Ghannouchi</h3>
+                <p class="review-text-full">Les robots éducatifs RDOC ont révolutionné nos méthodes pédagogiques. Un investissement qui en vaut vraiment la peine.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">SN</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Sarah Naoui</h3>
+                <p class="review-text-full">Qualité exceptionnelle et performances au top. L'équipe RDOC est très professionnelle et toujours à l'écoute.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">ME</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Mohamed El Amri</h3>
+                <p class="review-text-full">Robot très intelligent et facile à programmer. Idéal pour les ateliers technologiques dans nos écoles.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">FB</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Fatma Belhadj</h3>
+                <p class="review-text-full">Excellente solution pour les universités. Les étudiants sont plus motivés et、参与度更高。</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">HK</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Hamza Krichen</h3>
+                <p class="review-text-full">La technologie RDOC est impressionnante. Le support technique est réactif et très compétent.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">LS</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Lina Saidi</h3>
+                <p class="review-text-full">Des robots modernes qui répondent parfaitement aux besoins éducatifs. Je suis très satisfaite de mon achat.</p>
+            </div>
+
+            <div class="review-card-full">
+                <div class="review-avatar-full">RM</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">Rami Mansour</h3>
+                <p class="review-text-full">Rapport qualité-prix excellent. Les fonctionnalités IA intégrées dans ces robots sont vraiment avancées.</p>
+            </div>
+
+        </div>
+
+        <div class="user-comments-section">
+            <h2 class="comment-section-title">Commentaires récents</h2>
+            <div id="user-comments-container" class="reviews-grid-full"></div>
+        </div>
+
+        <div class="comment-section">
+            <h2 class="comment-section-title">Laisser un commentaire</h2>
+            <form class="comment-form" id="commentForm">
+                <div class="form-group">
+                    <label for="name">Votre nom</label>
+                    <input type="text" id="name" name="name" placeholder="Entrez votre nom complet" required>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Votre commentaire</label>
+                    <textarea id="comment" name="comment" placeholder="Partagez votre expérience avec nos produits..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Envoyer</button>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        const STORAGE_KEY = 'rdoc_user_comments';
+
+        function getInitials(name) {
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) {
+                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+            }
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return date.toLocaleDateString('fr-FR', options);
+        }
+
+        function getCurrentDateStr() {
+            return new Date().toISOString();
+        }
+
+        function createReviewCard(name, comment, timestamp) {
+            const card = document.createElement('div');
+            card.className = 'review-card-full review-card-animated';
+            card.innerHTML = `
+                <div class="review-avatar-full">${getInitials(name)}</div>
+                <div class="review-stars-full">
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg class="review-star-full" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <h3 class="review-name-full">${name}</h3>
+                <p class="review-text-full">${comment}</p>
+                <span class="review-timestamp">${formatDate(timestamp)}</span>
+            `;
+            return card;
+        }
+
+        function loadComments() {
+            const container = document.getElementById('user-comments-container');
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                const comments = JSON.parse(stored);
+                comments.forEach(item => {
+                    const card = createReviewCard(item.name, item.comment, item.timestamp);
+                    container.appendChild(card);
+                });
+            }
+        }
+
+        function saveComment(name, comment) {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            const comments = stored ? JSON.parse(stored) : [];
+            comments.push({
+                name: name,
+                comment: comment,
+                timestamp: getCurrentDateStr()
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadComments();
+
+            document.getElementById('commentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nameInput = document.getElementById('name');
+                const commentInput = document.getElementById('comment');
+                const container = document.getElementById('user-comments-container');
+
+                const name = nameInput.value.trim();
+                const comment = commentInput.value.trim();
+
+                if (name && comment) {
+                    saveComment(name, comment);
+                    const card = createReviewCard(name, comment, getCurrentDateStr());
+                    container.appendChild(card);
+
+                    nameInput.value = '';
+                    commentInput.value = '';
+
+                    container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const navbarInner = document.getElementById('navbar-inner');
+        const dropdown = document.getElementById('dropdown');
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+
+        let isMenuOpen = false;
+
+        menuToggle.addEventListener('click', () => {
+            isMenuOpen = !isMenuOpen;
+
+            if (isMenuOpen) {
+                navbarInner.classList.remove('bg-white');
+                navbarInner.classList.add('bg-black');
+                line1.classList.remove('bg-black', 'rotate-0', 'translate-y-0');
+                line1.classList.add('bg-white', 'rotate-45', 'translate-y-2');
+                line2.classList.remove('bg-black', 'rotate-0', 'translate-y-0');
+                line2.classList.add('bg-white', '-rotate-45', '-translate-y-2');
+                dropdown.classList.remove('hidden', 'dropdown-exit');
+                dropdown.classList.add('dropdown-enter');
+            } else {
+                closeMenu();
+            }
+        });
+
+        function closeMenu() {
+            navbarInner.classList.remove('bg-black');
+            navbarInner.classList.add('bg-white');
+            line1.classList.remove('bg-white', 'rotate-45', 'translate-y-2');
+            line1.classList.add('bg-black', 'rotate-0', 'translate-y-0');
+            line2.classList.remove('bg-white', '-rotate-45', '-translate-y-2');
+            line2.classList.add('bg-black', 'rotate-0', 'translate-y-0');
+            dropdown.classList.remove('dropdown-enter');
+            dropdown.classList.add('dropdown-exit');
+            setTimeout(() => {
+                if (!isMenuOpen) {
+                    dropdown.classList.add('hidden');
+                }
+            }, 300);
+        }
+
+        document.addEventListener('click', (e) => {
+            const navbar = document.getElementById('navbar');
+            if (navbar && !navbar.contains(e.target) && isMenuOpen) {
+                isMenuOpen = false;
+                closeMenu();
+            }
+        });
+
+        // Lenis smooth scroll initialization
+        const lenis = new Lenis();
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+    </script>
+    <script src="assets/js/main.js"></script>
+
+<?php include 'includes/footer.php'; ?>
+<script src="assets/js/nav.js"></script>
+</body>
+</html>
