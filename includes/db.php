@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "rdoc_db";
+$dbname = "backup";
 
 try {
     $conn = new mysqli($servername, $username, $password, $dbname);

@@ -3,7 +3,7 @@
 $host = 'localhost';
 $user = 'root';
 $pass = '';
-$dbname = 'rdoc_db';
+$dbname = 'backup';
 
 // 3- Préparation de la requete
 $conn = new mysqli($host, $user, $pass, $dbname);

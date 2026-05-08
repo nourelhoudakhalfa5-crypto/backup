@@ -1,7 +1,12 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
 
+if (adminIsLoggedIn()) {
+    redirectTo('index.php');
+}
+
 $error = '';
+$client_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -11,21 +16,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Veuillez remplir tous les champs';
     } else {
         $conn = getMySQLi();
-        $stmt = $conn->prepare("SELECT id, nom, mot_de_passe FROM administrateurs WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
         
-        if ($result && $result->num_rows > 0) {
-            $admin = $result->fetch_assoc();
-            if (password_verify($password, $admin['mot_de_passe'])) {
-                adminLogin($admin['id'], $admin['nom'], $email);
-                redirectTo('index.php');
+        $checkClient = $conn->prepare("SELECT id FROM utilisateurs WHERE email = ? AND role = 'client'");
+        $checkClient->bind_param("s", $email);
+        $checkClient->execute();
+        $clientResult = $checkClient->get_result();
+        
+        if ($clientResult->num_rows > 0) {
+            $client_message = 'Vous êtes un client. Veuillez utiliser la <a href="../login.php" class="text-primary hover:underline">page de connexion client</a>.';
+        } else {
+            $stmt = $conn->prepare("SELECT id, nom, mot_de_passe FROM administrateurs WHERE email = ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if ($result && $result->num_rows > 0) {
+                $admin = $result->fetch_assoc();
+                if (password_verify($password, $admin['mot_de_passe'])) {
+                    adminLogin($admin['id'], $admin['nom'], $email);
+                    redirectTo('index.php');
+                } else {
+                    $error = 'Email ou mot de passe incorrect';
+                }
             } else {
                 $error = 'Email ou mot de passe incorrect';
             }
-        } else {
-            $error = 'Email ou mot de passe incorrect';
         }
     }
 }
@@ -84,6 +99,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p class="text-white/60">Connectez-vous pour accéder au tableau de bord</p>
             </div>
             
+            <?php if ($client_message): ?>
+                <div class="bg-primary/20 border border-primary/30 rounded-lg p-3 mb-6 text-primary text-sm">
+                    <?= $client_message ?>
+                </div>
+            <?php endif; ?>
             <?php if ($error): ?>
                 <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-3 mb-6 text-red-400 text-sm">
                     <?= escape($error) ?>
@@ -111,9 +131,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </form>
             
-            <div class="mt-6 text-center">
-                <a href="../index.php" class="text-primary/70 hover:text-primary text-sm transition-colors">
-                    ← Retour au site
+            <div class="mt-6 text-center space-y-2">
+                <a href="../login.php" class="block text-primary/70 hover:text-primary text-sm transition-colors">
+                    ← Connexion client
+                </a>
+                <a href="../index.php" class="block text-white/40 hover:text-white/60 text-xs transition-colors">
+                    Retour au site
                 </a>
             </div>
         </div>

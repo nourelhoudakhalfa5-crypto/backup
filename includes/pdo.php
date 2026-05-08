@@ -1,6 +1,6 @@
 <?php
 $dbHost = 'localhost';
-$dbName = 'rdoc_db';
+$dbName = 'backup';
 $dbUser = 'root';
 $dbPass = '';
 

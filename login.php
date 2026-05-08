@@ -1,18 +1,23 @@
 <?php
 session_start();
 
-if (isset($_SESSION['user_id'])) {
-    if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
-        header('Location: dashboard.php');
-        exit;
-    } else {
-        header('Location: index.php');
-        exit;
-    }
+if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'client') {
+    header('Location: profil.php');
+    exit;
+}
+
+if (isset($_SESSION['admin_user'])) {
+    header('Location: admin/index.php');
+    exit;
+}
+
+if (isset($_GET['error']) && $_GET['error'] === 'admin_only') {
+    $admin_message = "Cette page est réservés aux clients. Les administrateurs doivent utiliser <a href='admin/login.php' class='text-primary hover:underline'>la page de connexion admin</a>.";
 }
 
 require_once 'includes/db.php';
 $error = '';
+$admin_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -21,57 +26,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($password)) {
         $error = "Veuillez remplir tous les champs.";
     } else {
-        // 1- connexion au serveur (via db.php)
-        // 2- Récupération des données (fait)
+        $stmt = $conn->prepare("SELECT id, nom, prenom, mot_de_passe, role FROM utilisateurs WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
         
-        $loggedIn = false;
-
-        // Check administrateurs
-        // 3- Préparation de la requete
-        $stmt_admin = $conn->prepare("SELECT id, mot_de_passe FROM administrateurs WHERE email = ?");
-        $stmt_admin->bind_param("s", $email);
-        // 4- Exécution de la requete
-        $stmt_admin->execute();
-        $res_admin = $stmt_admin->get_result();
-        
-        if ($res_admin->num_rows > 0) {
-            $admin = $res_admin->fetch_assoc();
-            // 5- Vérification
-            if (password_verify($password, $admin['mot_de_passe'])) {
-                session_regenerate_id(true);
-                $_SESSION['user_id'] = $admin['id'];
-                $_SESSION['role'] = 'admin';
-                header('Location: dashboard.php');
-                exit;
-            }
-        }
-        
-        // If not found or wrong password for admin, check utilisateurs
-        // 3- Préparation de la requete
-        $stmt_user = $conn->prepare("SELECT id, mot_de_passe, role FROM utilisateurs WHERE email = ?");
-        $stmt_user->bind_param("s", $email);
-        // 4- Exécution de la requete
-        $stmt_user->execute();
-        $res_user = $stmt_user->get_result();
-        
-        if ($res_user->num_rows > 0) {
-            $user = $res_user->fetch_assoc();
-            // 5- Vérification
-            if (password_verify($password, $user['mot_de_passe'])) {
+        if ($result->num_rows > 0) {
+            $user = $result->fetch_assoc();
+            
+            if ($user['role'] === 'admin') {
+                $admin_message = "Vous êtes un administrateur. Veuillez utiliser la <a href='admin/login.php' class='text-primary hover:underline'>page de connexion admin</a>.";
+            } elseif (password_verify($password, $user['mot_de_passe'])) {
                 session_regenerate_id(true);
                 $_SESSION['user_id'] = $user['id'];
-                $_SESSION['role'] = $user['role']; // 'admin' ou 'client'
-                
-                if ($user['role'] === 'admin') {
-                    header('Location: dashboard.php');
-                } else {
-                    header('Location: produit.php');
-                }
+                $_SESSION['user_nom'] = $user['nom'];
+                $_SESSION['user_prenom'] = $user['prenom'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['role'] = 'client';
+                header('Location: profil.php');
                 exit;
+            } else {
+                $error = "Email ou mot de passe incorrect.";
             }
+        } else {
+            $error = "Email ou mot de passe incorrect.";
         }
-        
-        $error = "Email ou mot de passe incorrect.";
     }
 }
 ?>
@@ -280,6 +259,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "
                 >
                     <form method="post" action="" class="space-y-5 sm:space-y-6 md:space-y-8 lg:space-y-[30px]">
+                        <?php if (!empty($admin_message)): ?>
+                            <div class="bg-primary/20 border border-primary/30 text-primary px-4 py-3 rounded-lg text-sm text-center">
+                                <?php echo $admin_message; ?>
+                            </div>
+                        <?php endif; ?>
                         <?php if (!empty($error)): ?>
                             <div class="bg-red-500/20 border border-red-500 text-red-100 px-4 py-3 rounded-lg text-sm text-center">
                                 <?php echo htmlspecialchars($error); ?>

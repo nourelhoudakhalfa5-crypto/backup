@@ -23,6 +23,13 @@ function adminEmail(): string {
 }
 
 function requireAdminLogin(): void {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (isset($_SESSION['user_id']) && isset($_SESSION['role']) && $_SESSION['role'] === 'client') {
+        header('Location: ../login.php?error=admin_only');
+        exit;
+    }
     if (!adminIsLoggedIn()) {
         header('Location: login.php');
         exit;
@@ -55,7 +62,7 @@ function getPDO(): PDO {
     static $pdo = null;
     if ($pdo === null) {
         $host = 'localhost';
-        $dbname = 'rdoc_db';
+        $dbname = 'backup';
         $user = 'root';
         $pass = '';
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass, [
@@ -72,7 +79,7 @@ function getMySQLi(): mysqli {
         $host = 'localhost';
         $user = 'root';
         $pass = '';
-        $dbname = 'rdoc_db';
+        $dbname = 'backup';
         $conn = new mysqli($host, $user, $pass, $dbname);
         if ($conn->connect_error) {
             die('Database connection failed: ' . $conn->connect_error);
