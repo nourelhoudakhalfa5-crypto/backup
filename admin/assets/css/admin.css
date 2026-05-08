@@ -677,11 +677,18 @@ select.form-input {
 #sidebar.collapsed .sidebar-collapse-btn svg { transform: rotate(180deg); }
 
 /* Navigation */
-.sidebar-nav {
+.sidebar-nav-wrapper {
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-nav {
+    flex-shrink: 0;
     padding: 12px 0;
+    overflow-y: visible;
 }
 
 .sidebar-nav::-webkit-scrollbar { width: 4px; }
@@ -775,6 +782,33 @@ select.form-input {
 .sidebar-user-role {
     font-size: 12px;
     color: var(--text-muted);
+}
+
+/* Logout Icon - Red */
+.sidebar-logout-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    text-decoration: none;
+}
+
+.sidebar-logout-icon:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    transform: scale(1.05);
+}
+
+.sidebar-logout-icon i {
+    width: 18px;
+    height: 18px;
 }
 
 /* Logout */

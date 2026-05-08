@@ -177,7 +177,7 @@ if ($statsResult) {
                                             <td class="px-4 py-3"><?= $plan['id'] ?></td>
                                             <td class="px-4 py-3 font-medium"><?= escape($plan['nom']) ?></td>
                                             <td class="px-4 py-3 max-w-xs truncate"><?= escape($plan['description'] ?? '-') ?></td>
-                                            <td class="px-4 py-3 text-right font-bold text-primary"><?= number_format($plan['prix'], 2, ',', ' ') ?> DH</td>
+                                            <td class="px-4 py-3 text-right font-bold text-primary"><?= number_format($plan['prix'], 2, ',', ' ') ?> TND</td>
                                             <td class="px-4 py-3 text-center"><?= $plan['duree'] === 'mois' ? 'Mois' : 'Année' ?></td>
                                             <td class="px-4 py-3 text-center"><?= $plan['nombre_produits'] ?: 'Illimité' ?></td>
                                             <td class="px-4 py-3 text-center"><?= getStatusBadge($plan['statut']) ?></td>

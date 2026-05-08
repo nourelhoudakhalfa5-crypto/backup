@@ -21,8 +21,8 @@ $basePath = (strpos($scriptPath, '/admin/pages/') !== false) ? '../' : '';
     </div>
     
     <!-- Navigation -->
+    <div class="sidebar-nav-wrapper">
     <nav class="sidebar-nav">
-        <!-- Dashboard -->
         <div class="sidebar-section">
             <a href="<?= $basePath ?>index.php" class="sidebar-nav-item <?= $currentPage === 'dashboard' ? 'active' : '' ?>">
                 <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
@@ -99,6 +99,7 @@ $basePath = (strpos($scriptPath, '/admin/pages/') !== false) ? '../' : '';
             </a>
         </div>
     </nav>
+    </div>
     
     <!-- User Section -->
     <div class="sidebar-user">
@@ -109,13 +110,10 @@ $basePath = (strpos($scriptPath, '/admin/pages/') !== false) ? '../' : '';
             <div class="sidebar-user-name"><?= escape(adminName()) ?></div>
             <div class="sidebar-user-role">Administrateur</div>
         </div>
+        <a href="<?= $basePath ?>logout.php" class="sidebar-logout-icon" onclick="return confirm('Êtes-vous sûr de vouloir vous déconnecter ?');" title="Déconnexion">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+        </a>
     </div>
-    
-    <!-- Logout -->
-    <a href="<?= $basePath ?>logout.php" class="sidebar-logout">
-        <i data-lucide="log-out" class="w-5 h-5"></i>
-        <span>Déconnexion</span>
-    </a>
 </aside>
 
 <!-- Sidebar Overlay -->

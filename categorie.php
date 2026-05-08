@@ -1,3 +1,19 @@
+<?php
+require_once 'includes/pdo.php';
+
+$categories = [];
+$stmt = $pdo->query("SELECT * FROM categories WHERE statut = 'actif' ORDER BY nom");
+$categories = $stmt->fetchAll();
+
+$categoryLinks = [
+    'ÉDUCATIVE' => 'educative.php',
+    'GESTION' => 'gestion.php',
+    'LOCALISATIVE' => 'localisative.php',
+    'INFORMATIVE' => 'informative.php',
+    'EDUCATIVE' => 'educative.php',
+    'AI' => 'produit.php'
+];
+?>
 <!doctype html>
 <html lang="fr">
   <head>
@@ -139,36 +155,27 @@
     <section class="py-[50px] sm:py-[70px] lg:py-[100px] bg-black" id="decouvrir">
       <div class="container mx-auto px-4 sm:px-6 md:px-16 lg:px-24">
         <h2 class="cat-section-title">Nos catégories</h2>
-        <div class="cat-grid">
-           <div class="cat-card reveal-cat">
-              <div class="cat-card-content">
-                 <h2>ÉDUCATIVE</h2>
-                 <p>APPRENTISSAGE INTERACTIF ET<br>CONTENU PÉDAGOGIQUE INTELLIGENT</p>
-                 <a href="educative.php" class="btn-acceder">Accéder</a>
-              </div>
-           </div>
-           <div class="cat-card reveal-cat">
-              <div class="cat-card-content">
-                 <h2>INFORMATIVE</h2>
-                 <p>ACCÈS RAPIDE À DES<br>INFORMATIONS FIABLES ET ACTUALISÉES</p>
-                 <a href="informative.php" class="btn-acceder">Accéder</a>
-              </div>
-           </div>
-           <div class="cat-card reveal-cat">
-              <div class="cat-card-content">
-                 <h2>LOCALISATIVE</h2>
-                 <p>ORIENTATION PRÉCISE ET REPÉRAGE<br>INTELLIGENT EN TEMS RÉEL</p>
-                 <a href="localisative.php" class="btn-acceder">Accéder</a>
-              </div>
-           </div>
-           <div class="cat-card reveal-cat">
-              <div class="cat-card-content">
-                 <h2>ANALYTIQUE ET GESTION</h2>
-                 <p>ANALYSE DES DONNÉES ET GESTION<br>OPTIMISÉE DES ACTIVITÉS</p>
-                 <a href="gestion.php" class="btn-acceder">Accéder</a>
-              </div>
-           </div>
-        </div>
+<div class="cat-grid">
+            <?php if (empty($categories)): ?>
+            <div class="cat-card reveal-cat">
+               <div class="cat-card-content">
+                  <h2>AUCUNE CATÉGORIE</h2>
+                  <p>Aucune catégorie disponible pour le moment.</p>
+                  <a href="produit.php" class="btn-acceder">Voir tous les produits</a>
+               </div>
+            </div>
+            <?php else: ?>
+            <?php foreach ($categories as $index => $category): ?>
+            <div class="cat-card reveal-cat" style="transition-delay: <?= $index * 0.1 ?>s">
+               <div class="cat-card-content">
+                  <h2><?= strtoupper(htmlspecialchars($category['nom'])) ?></h2>
+                  <p><?= htmlspecialchars($category['description'] ?? 'Découvrez nos produits dans cette catégorie') ?></p>
+                  <a href="produit.php?categorie=<?= $category['id'] ?>" class="btn-acceder">Accéder</a>
+               </div>
+            </div>
+            <?php endforeach; ?>
+            <?php endif; ?>
+         </div>
       </div>
     </section>
 

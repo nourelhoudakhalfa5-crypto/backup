@@ -123,7 +123,7 @@ if ($result) {
                                         <tr class="order-row" data-name="<?= strtolower($order['prenom'] . ' ' . $order['nom']) ?>" data-status="<?= $order['statut'] ?>">
                                             <td class="px-4 py-3"><?= $order['id'] ?></td>
                                             <td class="px-4 py-3"><?= escape($order['prenom'] . ' ' . $order['nom']) ?></td>
-                                            <td class="px-4 py-3"><?= number_format($order['total'], 2, ',', ' ') ?> DH</td>
+                                            <td class="px-4 py-3"><?= number_format($order['total'], 2, ',', ' ') ?> TND</td>
                                             <td class="px-4 py-3">
                                                 <select class="form-input w-full order-status-select" 
                                                         data-id="<?= $order['id'] ?>"

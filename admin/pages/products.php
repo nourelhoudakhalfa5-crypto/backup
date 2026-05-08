@@ -193,7 +193,7 @@ if ($result) {
                                                     <?= $product['stock'] ?>
                                                 </span>
                                             </td>
-                                            <td class="px-4 py-3 text-right"><?= number_format($product['prix'], 2, ',', ' ') ?> DH</td>
+                                            <td class="px-4 py-3 text-right"><?= number_format($product['prix'], 2, ',', ' ') ?> TND</td>
                                             <td class="px-4 py-3 text-center"><?= getStatusBadge($product['statut']) ?></td>
                                             <td class="px-4 py-3">
                                                 <div class="flex items-center justify-end gap-2">

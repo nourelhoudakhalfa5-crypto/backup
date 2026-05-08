@@ -142,7 +142,7 @@ $avgRating = $res ? round($res->fetch_assoc()['avg'] ?? 0, 1) : 0;
                             </div>
                             <span class="text-xs text-text-secondary">Chiffre d'affaires</span>
                         </div>
-                        <div class="font-orbitron text-2xl font-bold"><?= number_format($totalRevenue, 0, ',', ' ') ?> <span class="text-sm font-normal">DH</span></div>
+                        <div class="font-orbitron text-2xl font-bold"><?= number_format($totalRevenue, 0, ',', ' ') ?> <span class="text-sm font-normal">TND</span></div>
                         <div class="text-xs text-green-400 mt-1">Total</div>
                     </div>
                     
@@ -265,7 +265,7 @@ $avgRating = $res ? round($res->fetch_assoc()['avg'] ?? 0, 1) : 0;
                                 <div class="flex items-center gap-3 text-sm">
                                     <div class="w-2 h-2 rounded-full bg-primary"></div>
                                     <span class="text-text-secondary"><?= escape($order['prenom']) ?> <?= escape($order['nom']) ?></span>
-                                    <span class="text-primary font-bold"><?= number_format($order['total'], 0) ?> DH</span>
+                                    <span class="text-primary font-bold"><?= number_format($order['total'], 0) ?> TND</span>
                                 </div>
                             <?php endforeach; ?>
                             <?php if (empty($recentOrders)): ?>
@@ -303,7 +303,7 @@ $avgRating = $res ? round($res->fetch_assoc()['avg'] ?? 0, 1) : 0;
                                         <tr>
                                             <td class="px-4 py-3">#<?= $order['id'] ?></td>
                                             <td class="px-4 py-3"><?= escape($order['prenom'] . ' ' . $order['nom']) ?></td>
-                                            <td class="px-4 py-3"><?= number_format($order['total'], 2, ',', ' ') ?> DH</td>
+                                            <td class="px-4 py-3"><?= number_format($order['total'], 2, ',', ' ') ?> TND</td>
                                             <td class="px-4 py-3"><?= getStatusBadge($order['statut']) ?></td>
                                             <td class="px-4 py-3"><?= date('d/m/Y H:i', strtotime($order['date_commande'])) ?></td>
                                         </tr>
@@ -355,7 +355,7 @@ $avgRating = $res ? round($res->fetch_assoc()['avg'] ?? 0, 1) : 0;
             data: {
                 labels: <?= json_encode(array_column($monthlyRevenue, 'month')) ?>,
                 datasets: [{
-                    label: 'Revenus (DH)',
+                    label: 'Revenus (TND)',
                     data: <?= json_encode(array_column($monthlyRevenue, 'revenue')) ?>,
                     borderColor: '#5CC4E5',
                     backgroundColor: 'rgba(92, 196, 229, 0.1)',

@@ -25,7 +25,7 @@ $productName = htmlspecialchars($product['nom'], ENT_QUOTES, 'UTF-8');
 $productDescription = htmlspecialchars($product['description'] ?: 'Robot RDOC intelligent.', ENT_QUOTES, 'UTF-8');
 $productImage = htmlspecialchars($product['image_url'] ?: 'assets/images/robot.png', ENT_QUOTES, 'UTF-8');
 $productCategory = htmlspecialchars($product['categorie'] ?: 'Robot RDOC', ENT_QUOTES, 'UTF-8');
-$productPrice = number_format((float) $product['prix'], 2) . ' DH';
+$productPrice = number_format((float) $product['prix'], 2) . ' TND';
 ?>
 <!doctype html>
 <html lang="fr">

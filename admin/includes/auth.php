@@ -99,7 +99,7 @@ function escape($value) {
 }
 
 function formatPrice($price) {
-    return number_format((float) $price, 2, ',', ' ') . ' DH';
+    return number_format((float) $price, 2, ',', ' ') . ' TND';
 }
 
 function formatDate($date, $format = 'd/m/Y H:i') {

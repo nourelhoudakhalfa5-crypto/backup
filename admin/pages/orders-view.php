@@ -152,15 +152,15 @@ $statusOptions = [
                                                     </div>
                                                 </td>
                                                 <td class="px-4 py-3 text-center"><?= $item['quantite'] ?></td>
-                                                <td class="px-4 py-3 text-right"><?= number_format($item['prix_unitaire'], 2, ',', ' ') ?> DH</td>
-                                                <td class="px-4 py-3 text-right font-bold"><?= number_format($item['quantite'] * $item['prix_unitaire'], 2, ',', ' ') ?> DH</td>
+                                                <td class="px-4 py-3 text-right"><?= number_format($item['prix_unitaire'], 2, ',', ' ') ?> TND</td>
+                                                <td class="px-4 py-3 text-right font-bold"><?= number_format($item['quantite'] * $item['prix_unitaire'], 2, ',', ' ') ?> TND</td>
                                             </tr>
                                         <?php endforeach; ?>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <td colspan="3" class="px-4 py-3 text-right font-bold">Total</td>
-                                            <td class="px-4 py-3 text-right font-bold text-primary text-lg"><?= number_format($order['total'], 2, ',', ' ') ?> DH</td>
+                                            <td class="px-4 py-3 text-right font-bold text-primary text-lg"><?= number_format($order['total'], 2, ',', ' ') ?> TND</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -255,7 +255,7 @@ $statusOptions = [
                                 </div>
                                 <div class="flex justify-between pt-3 border-t border-white/10">
                                     <span class="font-bold">Total</span>
-                                    <span class="font-bold text-primary"><?= number_format($order['total'], 2, ',', ' ') ?> DH</span>
+                                    <span class="font-bold text-primary"><?= number_format($order['total'], 2, ',', ' ') ?> TND</span>
                                 </div>
                             </div>
                         </div>

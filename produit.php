@@ -1,13 +1,30 @@
 <?php
 require_once 'includes/pdo.php';
 
-$stmt = $pdo->query("
-    SELECT id, nom, image_url
-    FROM produits
-    WHERE statut = 'actif'
-    ORDER BY nom
-");
+$categorie_id = isset($_GET['categorie']) ? (int)$_GET['categorie'] : null;
+
+if ($categorie_id) {
+    $stmt = $pdo->prepare("
+        SELECT id, nom, image_url
+        FROM produits
+        WHERE statut = 'actif' AND categorie_id = ?
+        ORDER BY nom
+    ");
+    $stmt->execute([$categorie_id]);
+} else {
+    $stmt = $pdo->query("
+        SELECT id, nom, image_url
+        FROM produits
+        WHERE statut = 'actif'
+        ORDER BY nom
+    ");
+}
 $catalogProducts = $stmt->fetchAll();
+
+// Get active categories for filtering
+$categories = [];
+$catStmt = $pdo->query("SELECT id, nom FROM categories WHERE statut = 'actif' ORDER BY nom");
+$categories = $catStmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="fr">

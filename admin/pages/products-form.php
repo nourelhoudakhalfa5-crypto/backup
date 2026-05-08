@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium mb-2 text-white/80">Prix (DH) *</label>
+                                    <label class="block text-sm font-medium mb-2 text-white/80">Prix (TND) *</label>
                                     <input type="number" name="prix" step="0.01" min="0" required 
                                            value="<?= $product['prix'] ?>"
                                            class="form-input w-full" placeholder="0.00">

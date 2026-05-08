@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
                             
                             <div>
-                                <label class="form-label">Prix (DH) *</label>
+                                <label class="form-label">Prix (TND) *</label>
                                 <input type="number" name="prix" class="form-input" value="<?= $plan['prix'] ?>" required step="0.01" min="0" placeholder="99.00">
                             </div>
                         </div>
