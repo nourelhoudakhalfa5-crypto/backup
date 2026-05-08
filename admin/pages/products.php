@@ -93,16 +93,16 @@ if ($result) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
 </head>
 <body class="bg-bg-dark text-text-primary font-inter min-h-screen">
-    <div class="flex h-screen overflow-hidden">
+    <div class="admin-wrapper">
         <?php require_once __DIR__ . '/../layout/sidebar.php'; ?>
         
-        <div class="flex-1 flex flex-col overflow-hidden lg:ml-0">
+        <div class="main-content collapsed">
             <header class="flex items-center justify-between h-16 px-4 lg:px-6 glass border-b border-white/10">
-                <div class="flex items-center gap-4">
-                    <button id="mobile-menu-btn" class="lg:hidden text-text-secondary hover:text-primary">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
+                <div class="flex items-center gap-3">
+                    <button type="button" onclick="openSidebar()" class="mobile-menu-btn-header" aria-label="Menu">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
                     </button>
-                    <h1 class="font-orbitron text-xl text-primary"><?= $pageTitle ?></h1>
+                    <h1 class="font-orbitron text-lg lg:text-xl text-primary"><?= $pageTitle ?></h1>
                 </div>
                 <div class="flex items-center gap-2">
                     <form method="POST" class="flex items-center gap-2" id="bulk-form">
@@ -226,15 +226,9 @@ if ($result) {
         </div>
     </div>
     
-    <div id="sidebar-overlay" class="sidebar-overlay"></div>
-    
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
-        
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const sidebar = document.getElementById('sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
         const searchInput = document.getElementById('search-input');
         const statusFilter = document.getElementById('status-filter');
         const rows = document.querySelectorAll('.product-row');
